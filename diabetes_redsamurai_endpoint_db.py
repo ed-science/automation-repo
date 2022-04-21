@@ -22,7 +22,7 @@ headers = ['times_pregnant', 'glucose', 'blood_pressure', 'skin_fold_thick', 'se
 
 
 # Use pickle to load in the pre-trained model
-with open(f'diabetes-model.pkl', 'rb') as f:
+with open('diabetes-model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 
@@ -52,7 +52,7 @@ CORS(app)
 def predict():
     payload = request.json['data']
     values = [float(i) for i in payload.split(',')]
-    
+
     input_variables = pd.DataFrame([values],
                                 columns=headers, 
                                 dtype=float,
@@ -61,10 +61,8 @@ def predict():
     # Get the model's prediction
     prediction_proba = model.predict_proba(input_variables)
     prediction = (prediction_proba[0])[1]
-    
-    ret = '{"prediction":' + str(float(prediction)) + '}'
-    
-    return ret
+
+    return '{"prediction":' + str(float(prediction)) + '}'
 
 # running REST interface, port=5000 for direct test
 if __name__ == "__main__":
